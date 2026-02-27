@@ -4,8 +4,6 @@
 
 Like Karpathy's [MicroGPT](https://karpathy.github.io/2026/02/12/microgpt/) showed the algorithmic essence of GPT in ~200 lines, **Micro Diffusion** shows the essence of **text diffusion models** — a fundamentally different approach to text generation.
 
-<br>
-
 ## Autoregressive vs Diffusion: The Core Idea
 
 |  | Autoregressive (GPT, etc.) | Diffusion (This Project) |
@@ -14,8 +12,6 @@ Like Karpathy's [MicroGPT](https://karpathy.github.io/2026/02/12/microgpt/) show
 | **Attention** | Causal (can only look left) | Bidirectional (can look everywhere) |
 | **Analogy** | Writing a sentence word by word | Sculptor revealing a statue from marble |
 | **Training** | "Given previous tokens, predict next" | "Given partially erased text, predict original" |
-
-<br>
 
 ## How Text Diffusion Works
 
@@ -41,8 +37,6 @@ The model learns: **"Given partially erased text at noise level t, predict the o
 
 Then at generation time, it starts from a fully blank slate and iteratively fills in letters — **most confident guesses first**, like solving a crossword puzzle.
 
-<br>
-
 ## What's Included
 
 | File | Lines | Denoiser | Dependencies | Description |
@@ -53,8 +47,6 @@ Then at generation time, it starts from a fully blank slate and iteratively fill
 | `names.txt` | — | — | — | 32,000 English names from U.S. SSA data. |
 
 All three files implement the **same diffusion algorithm**. Only the denoiser architecture differs — because the diffusion mechanism is architecture-agnostic.
-
-<br>
 
 ## Quick Start
 
@@ -81,8 +73,6 @@ All will:
 1. Show the forward diffusion process (progressive masking)
 2. Train the denoiser (~1-5 minutes on CPU)
 3. Generate new names via reverse diffusion
-
-<br>
 
 ## Example Output
 
@@ -129,8 +119,6 @@ Temperature 1.0: rahany, korianth, maheon
 Temperature 1.5: aridpye, nzllauae, diryta
 ```
 
-<br>
-
 ## Key Concepts You'll Learn
 
 ### 1. Discrete Diffusion (Absorbing State)
@@ -150,8 +138,6 @@ Controls the randomness of generation:
 - **Low (0.5):** Conservative, picks high-probability tokens → common, safe names
 - **Medium (0.8):** Balanced creativity and coherence
 - **High (1.5):** Wild, explores unlikely tokens → unusual, sometimes broken names
-
-<br>
 
 ## Architecture Comparison
 
@@ -174,8 +160,6 @@ Output: logits (max_len × vocab_size)
 
 The **diffusion training/sampling loop is identical** across all three. Only the denoiser differs — because the denoiser is a pluggable component. You could swap in a CNN, RNN, or any architecture; the diffusion algorithm stays the same.
 
-<br>
-
 ## Scaling Up (What Production Models Change)
 
 This is a toy model. Production text diffusion models (like MDLM, SEDD, Plaid) change:
@@ -191,8 +175,6 @@ This is a toy model. Production text diffusion models (like MDLM, SEDD, Plaid) c
 
 The **core algorithm** (mask → denoise → unmask) stays the same.
 
-<br>
-
 ## Why Text Diffusion Matters
 
 Autoregressive models (GPT) dominate text generation today, but diffusion offers unique advantages:
@@ -204,8 +186,6 @@ Autoregressive models (GPT) dominate text generation today, but diffusion offers
 
 The tradeoff: diffusion models for text are still catching up to GPT in raw quality, but the gap is closing rapidly.
 
-<br>
-
 ## References
 
 - [Structured Denoising Diffusion Models (D3PM)](https://arxiv.org/abs/2107.03006) — Austin et al., 2021
@@ -213,8 +193,6 @@ The tradeoff: diffusion models for text are still catching up to GPT in raw qual
 - [Masked Diffusion Language Models (MDLM)](https://arxiv.org/abs/2406.07524) — Sahoo et al., 2024
 - [Simple and Effective Masked Diffusion Models (SimpleDM)](https://arxiv.org/abs/2406.04329) — Shi et al., 2024
 - [MicroGPT by Karpathy](https://karpathy.github.io/2026/02/12/microgpt/) — The inspiration for this project
-
-<br>
 
 ## License
 
