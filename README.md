@@ -62,10 +62,8 @@ python3 train_pure.py
 
 ### PyTorch script
 
-Install a PyTorch build compatible with your Python version, then:
-
 ```bash
-pip install -r requirements-torch.txt
+pip install -r requirements.txt
 python3 train.py
 ```
 
@@ -96,8 +94,7 @@ This repository is intentionally small, so the main maintenance risks are enviro
 
 Current baseline:
 
-- `requirements.txt` covers the NumPy-only paths.
-- `requirements-torch.txt` layers PyTorch on top of the NumPy baseline.
+- `requirements.txt` installs the shared NumPy baseline plus PyTorch for the transformer path.
 - Scripts no longer start training just because they were imported.
 - `train_minimal.py` is compatible with older Python runtimes that do not support dictionary union syntax.
 - `train.py` avoids the duplicate temperature-sweep sampling call that previously doubled part of the runtime.
