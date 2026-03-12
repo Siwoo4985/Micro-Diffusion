@@ -73,7 +73,7 @@ If PyTorch is missing, `train.py` now exits with a direct install hint instead o
 
 ## Handy CLI Flags
 
-Each training script supports a small CLI for smoke tests and quick experiments:
+Each training script supports a small CLI for quick experiments:
 
 ```bash
 python3 train_minimal.py --steps 100 --samples 5 --seed 7
@@ -88,7 +88,7 @@ Useful options:
 - `--samples`: number of generated names
 - `--temperature`: primary sampling temperature
 - `--seed`: make runs repeatable
-- `--quiet`: reduce logs for smoke tests
+- `--quiet`: reduce logs
 
 ## Maintenance
 
@@ -101,15 +101,6 @@ Current baseline:
 - Scripts no longer start training just because they were imported.
 - `train_minimal.py` is compatible with older Python runtimes that do not support dictionary union syntax.
 - `train.py` avoids the duplicate temperature-sweep sampling call that previously doubled part of the runtime.
-
-Run the smoke checks with:
-
-```bash
-python3 -m unittest discover -s tests
-```
-
-The test suite always checks Python compilation and the NumPy scripts.  
-The PyTorch smoke test is skipped automatically when `torch` is not installed.
 
 ## Concepts
 
