@@ -2,7 +2,26 @@
 
 **Minimal text diffusion in Python.**
 
+[![Python 3](https://img.shields.io/badge/Python-3-blue.svg)](https://www.python.org/)
+[![NumPy](https://img.shields.io/badge/NumPy-required-013243.svg?logo=numpy)](https://numpy.org/)
+[![PyTorch](https://img.shields.io/badge/PyTorch-optional-EE4C2C.svg?logo=pytorch)](https://pytorch.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](./LICENSE)
+
 Karpathy's [MicroGPT](https://karpathy.github.io/2026/02/12/microgpt/) showed how GPT works in a few hundred lines. This project aims for the same style of explanation, but for **discrete text diffusion**.
+
+Built for readers who want to understand the core text-diffusion loop without a large framework, large dataset pipeline, or production training stack.
+
+Quick links: [Quick Start](#quick-start) · [Files](#files) · [Dataset](#dataset) · [Reproducibility](#reproducibility) · [Limitations](#limitations)
+
+## Why This Repo Exists
+
+Most text-generation examples focus on autoregressive models. This repository shows the other path:
+
+- Mask tokens instead of shifting them
+- Denoise the full sequence instead of predicting strictly left to right
+- Swap the denoiser architecture without changing the diffusion loop
+
+It is best treated as a learning repo and maintenance-friendly reference implementation, not a benchmark or production system.
 
 ## Autoregressive vs Diffusion
 
@@ -47,7 +66,24 @@ All three share the same masking, denoising, and confidence-based unmasking idea
 The NumPy scripts cap sequence length at 12, so they train on 31,979 names.  
 The PyTorch script keeps a max length of 16 and uses all 32,000 names.
 
+## Dataset
+
+The training data is [`names.txt`](./names.txt), a list of 32,000 lowercase names using only `a-z`.
+
+- Character vocabulary: 26 letters
+- Special tokens: PAD and MASK
+- NumPy variants: names longer than 12 characters are filtered out
+- PyTorch variant: uses the full file with a max sequence length of 16
+
+This keeps the tokenizer simple and makes it easy to inspect the full corruption and denoising process by eye.
+
 ## Quick Start
+
+### Prerequisites
+
+- Python 3
+- `pip`
+- For `train.py`, a PyTorch build compatible with your Python version and platform
 
 ### NumPy scripts
 
@@ -88,6 +124,27 @@ Useful options:
 - `--seed`: make runs repeatable
 - `--quiet`: reduce logs
 
+## Expected Output
+
+Each script trains for a short run, then prints generated names. The exact output changes from run to run, but the structure is always:
+
+```text
+Training...
+...
+Generated names:
+  amira
+  kayna
+  noria
+```
+
+For quick maintenance checks, reduce steps and sample count:
+
+```bash
+python3 train_minimal.py --steps 10 --samples 3 --seed 7
+python3 train_pure.py --steps 10 --samples 3 --seed 7 --no-temperature-sweep
+python3 train.py --steps 10 --samples 3 --seed 7 --no-temperature-sweep
+```
+
 ## Maintenance
 
 This repository is intentionally small, so the main maintenance risks are environmental drift and script behavior drift.
@@ -98,6 +155,17 @@ Current baseline:
 - Scripts no longer start training just because they were imported.
 - `train_minimal.py` is compatible with older Python runtimes that do not support dictionary union syntax.
 - `train.py` avoids the duplicate temperature-sweep sampling call that previously doubled part of the runtime.
+
+## Reproducibility
+
+This project is intentionally lightweight, so reproducibility is partial rather than strict.
+
+- All scripts support `--seed`
+- NumPy runs are easy to make repeatable on the same machine
+- PyTorch runs may still vary across devices and torch builds
+- There is currently no checkpoint saving, evaluation harness, or experiment tracking
+
+If you plan to extend this repository, the next maintenance step is usually adding saved checkpoints and a small regression harness for generated outputs.
 
 ## Concepts
 
@@ -149,6 +217,16 @@ Autoregressive models dominate, but diffusion can:
 - Generate in an order other than left to right
 
 Quality still trails strong autoregressive models, but the gap has narrowed.
+
+## Limitations
+
+- Character-level names only, not wordpiece or BPE tokenization
+- No validation split, held-out metrics, or benchmark reporting
+- No checkpointing or resume support
+- No packaged module layout yet; the project is still script-first
+- README examples are educational, not guarantees of sample quality
+
+This is deliberate. The repo optimizes for readability and hackability over completeness.
 
 ## References
 
